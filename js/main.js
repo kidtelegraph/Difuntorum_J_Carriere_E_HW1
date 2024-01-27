@@ -52,9 +52,6 @@
         .catch(error => {
             console.log(error);
         });
-
-        const characterImage = e.currentTarget.dataset.image;
-        displayCharacterImage(characterImage);
     }
 
     function displayMovieInfo(film) {
@@ -70,23 +67,15 @@
         movieInfoCon.appendChild(openingCrawl);
     }
 
-    function displayCharacterImage(imageUrl) {
-        posterCon.innerHTML = '';
-
-        const image = document.createElement('img');
-        image.src = imageUrl;
-        image.alt = "Character Poster";
-
-        posterCon.appendChild(image);
-    }
 
     function getCharacterId(url) {
-        const matches = url.match(/\/([0-9]+)\/$/);
+        const matches = url.match(/[0-9]+$/);
         if (matches) {
             return matches[1];
         }
         return null;
     }
+
 
     getCharacters();
 })();
