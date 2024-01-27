@@ -1,25 +1,29 @@
 (() => {
     const characterBox = document.querySelector("#character-box");
-    const movieInfoCon = document.querySelector("#movie-info-con"); // Container to display movie info
+    const movieInfoCon = document.querySelector("#movie-info-con");
+    const posterCon = document.querySelector("#poster-con");
     const baseUrl = "https://swapi.dev/api";
 
     function getCharacters() {
-        fetch(`${baseUrl}/people/`)
+        const randomPage = Math.floor(Math.random() * 7) + 1;
+        fetch(`${baseUrl}/people/?page=${randomPage}`)
         .then(response => response.json())
         .then(function(response){
-            const characters = response.results;
+            let characters = response.results;
+            characters = (characters);
+    
             const ul = document.createElement('ul');
-
+    
             characters.forEach(character => {
                 const li = document.createElement('li');
                 const a = document.createElement('a');
                 a.textContent = character.name;
-                a.href = "#"; // Prevent the page from reloading on link click
-                a.dataset.films = JSON.stringify(character.films); // Store film URLs for later
+                a.dataset.films = JSON.stringify(character.films);
+                a.dataset.image = `https://starwars-visualguide.com/assets/img/characters/${getCharacterId(character.url)}.jpg`;
                 li.appendChild(a);
                 ul.appendChild(li);
             });
-
+    
             characterBox.appendChild(ul);
         })
         .then(function(){
@@ -33,12 +37,14 @@
         });
     }
     
-    function getCharacterFilms(e) {
-        e.preventDefault(); // Prevent the default link action
-        const films = JSON.parse(e.currentTarget.dataset.films);
 
-        // Assuming we're just interested in the first film for this demo
-        fetch(films[0])
+    function getCharacterFilms(e) {
+        e.preventDefault();
+        const films = JSON.parse(e.currentTarget.dataset.films);
+        const randomFilmIndex = Math.floor(Math.random() * films.length);
+        const randomFilmUrl = films[randomFilmIndex];
+
+        fetch(randomFilmUrl)
         .then(response => response.json())
         .then(function(film) {
             displayMovieInfo(film);
@@ -46,10 +52,13 @@
         .catch(error => {
             console.log(error);
         });
+
+        const characterImage = e.currentTarget.dataset.image;
+        displayCharacterImage(characterImage);
     }
 
     function displayMovieInfo(film) {
-        movieInfoCon.innerHTML = ''; // Clear existing movie info if any
+        movieInfoCon.innerHTML = '';
 
         const title = document.createElement('h2');
         title.textContent = film.title;
@@ -59,8 +68,24 @@
 
         movieInfoCon.appendChild(title);
         movieInfoCon.appendChild(openingCrawl);
+    }
 
-        // Add more film details as you like (e.g., director, release date, etc.)
+    function displayCharacterImage(imageUrl) {
+        posterCon.innerHTML = '';
+
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.alt = "Character Poster";
+
+        posterCon.appendChild(image);
+    }
+
+    function getCharacterId(url) {
+        const matches = url.match(/\/([0-9]+)\/$/);
+        if (matches) {
+            return matches[1];
+        }
+        return null;
     }
 
     getCharacters();
