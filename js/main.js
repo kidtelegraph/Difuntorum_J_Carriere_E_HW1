@@ -1,62 +1,67 @@
 (() => {
-    const movieBox = document.querySelector("#movie-box");
-    const reviewTemplate = document.querySelector("#review-template");
-    const reviewCon = document.querySelector("#review-con");
-    const baseUrl = `https://search.imdbot.workers.dev/`;
+    const characterBox = document.querySelector("#character-box");
+    const movieInfoCon = document.querySelector("#movie-info-con"); // Container to display movie info
+    const baseUrl = "https://swapi.dev/api";
 
-    function getMovies() {
-        fetch(`${baseUrl}?q=thor`)
+    function getCharacters() {
+        fetch(`${baseUrl}/people/`)
         .then(response => response.json())
         .then(function(response){
-            //console.log(response.description);
-            const movies =response.description;
+            const characters = response.results;
             const ul = document.createElement('ul');
-            movies.forEach(movie => {
-                console.log(movie['#TITLE']);
-                console.log(movie['#IMDB_ID']);
+
+            characters.forEach(character => {
                 const li = document.createElement('li');
                 const a = document.createElement('a');
-                a.textContent = movie['#TITLE'];
-                a.dataset.review = movie['#IMDB_ID'];
+                a.textContent = character.name;
+                a.href = "#"; // Prevent the page from reloading on link click
+                a.dataset.films = JSON.stringify(character.films); // Store film URLs for later
                 li.appendChild(a);
                 ul.appendChild(li);
             });
-            movieBox.appendChild(ul);
-            
+
+            characterBox.appendChild(ul);
         })
         .then(function(){
-            const links = document.querySelectorAll('#movie-box li a');
+            const links = document.querySelectorAll('#character-box li a');
             links.forEach(link => {
-                link.addEventListener("click", getReview);
+                link.addEventListener("click", getCharacterFilms);
             })
         })
         .catch(error => {
             console.log(error);
-            // ideally we would write to the DOM and let user know, something is wrong
         });
     }
     
-    function getReview(e) {
-        //console.log("getReview Called");
-        //console.log(event.currentTarget.dataset.review);
-        //console.log(this.dataset.review);
-        const reviewID = e.currentTarget.dataset.review;
-        //https://search.imdbot.workers.dev/tt=tt0145487
-        fetch(`${baseUrl}?tt=${reviewID}`)
+    function getCharacterFilms(e) {
+        e.preventDefault(); // Prevent the default link action
+        const films = JSON.parse(e.currentTarget.dataset.films);
+
+        // Assuming we're just interested in the first film for this demo
+        fetch(films[0])
         .then(response => response.json())
-        .then(function(response) {
-            reviewCon.innerHTML = "";
-            console.log(response.short.review.reviewBody);
-            const template = document.importNode(reviewTemplate.content, true);
-            const reviewBody = template.querySelector(".review-description");
-            reviewBody.innerHTML = response.short.review.reviewBody;
-            reviewCon.appendChild(template);
+        .then(function(film) {
+            displayMovieInfo(film);
         })
         .catch(error => {
             console.log(error);
         });
     }
 
-    getMovies();
-})();
+    function displayMovieInfo(film) {
+        movieInfoCon.innerHTML = ''; // Clear existing movie info if any
 
+        const title = document.createElement('h2');
+        title.textContent = film.title;
+
+        const openingCrawl = document.createElement('p');
+        openingCrawl.textContent = film.opening_crawl;
+
+        movieInfoCon.appendChild(title);
+        movieInfoCon.appendChild(openingCrawl);
+
+        // Add more film details as you like (e.g., director, release date, etc.)
+    }
+
+    getCharacters();
+})();
