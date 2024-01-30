@@ -75,10 +75,10 @@
         const posterImg = document.createElement('img');
         const posterFilename = posterMapping[film.title];
         if (posterFilename) {
-            posterImg.src = `./images/${posterFilename}`;
+            posterImg.src = `images/${posterFilename}`;
             posterImg.alt = film.title + 'Poster';
         } else {
-            posterImg.src = ''; // 
+            posterImg.src = '';
             posterImg.alt = 'No Poster Available';
         }
         posterCon.innerHTML = '';
