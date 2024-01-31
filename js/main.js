@@ -4,15 +4,6 @@
     const posterCon = document.querySelector("#poster-con");
     const baseUrl = "https://swapi.dev/api";
     
-        const posterMapping = {
-            "The Phantom Menace": "the_phantom_menace.jpg",
-            "Attack of the Clones": "attack_of_the_clones.jpg",
-            "Revenge of the Sith": "revenge_of_the_sith.jpg",
-            "A New Hope": "a_new_hope.jpg",
-            "The Empire Strikes Back": "the_empire_strikes_back.jpg",
-            "Return of the Jedi": "return_of_the_jedi.jpg"
-        };
-    
     function getCharacters() {
         const randomPage = Math.floor(Math.random() * 7) + 1;
         fetch(`${baseUrl}/people/?page=${randomPage}`)
@@ -64,26 +55,27 @@
     }
 
     function displayMovieInfo(film) {
-        movieInfoCon.innerHTML = '';
+        movieInfoCon.innerHTML = "";
 
-        const title = document.createElement('h2');
+        const title = document.createElement("h2");
         title.textContent = film.title;
 
-        const openingCrawl = document.createElement('p');
+        const openingCrawl = document.createElement("p");
         openingCrawl.textContent = film.opening_crawl;
 
-        const posterImg = document.createElement('img');
-        const posterFilename = posterMapping[film.title];
-        if (posterFilename) {
-            posterImg.src = `images/${posterFilename}`;
-            posterImg.alt = film.title + 'Poster';
-        } else {
-            posterImg.src = '';
-            posterImg.alt = 'No Poster Available';
-        }
-        posterCon.innerHTML = '';
-        posterCon.appendChild(posterImg);
+        const posterImg = document.createElement("img");
 
+        const posterFilename = film.title.toLowerCase().replace(/ /g, "_");
+        if (posterFilename) {
+            posterImg.src = `images/${posterFilename}.jpg`;
+            posterImg.alt = film.title;
+        } else {
+            posterImg.src = "";
+            posterImg.alt = "No Poster Available";
+        }
+        posterCon.innerHTML = "";
+        
+        posterCon.appendChild(posterImg);
         movieInfoCon.appendChild(title);
         movieInfoCon.appendChild(openingCrawl);
     }
