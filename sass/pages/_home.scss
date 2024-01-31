@@ -1,3 +1,46 @@
+#character-box {
+    background-color: rgba(172, 3, 3, 0.753);
+}
+
+#info-box {
+    background-color: rgba(172, 3, 3, 0.753);
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    padding: 10px;
+}
+
 a {
     cursor: pointer;
+    color: white;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    opacity: 100%;
 }
+
+h2 {
+    color: white;
+    opacity: 100%;
+    font-size: 40px;
+}
+
+p {
+    color: white;
+    opacity: 100%;
+    font-size: 30px;
+}
+
+body {
+    background-image: url("/images/star_wars_logo.png");
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+
