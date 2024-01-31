@@ -56,6 +56,7 @@
 
     function displayMovieInfo(film) {
         movieInfoCon.innerHTML = "";
+        posterCon.innerHTML = "";
 
         const title = document.createElement("h2");
         title.textContent = film.title;
@@ -65,15 +66,12 @@
 
         const posterImg = document.createElement("img");
 
-        const posterFilename = film.title.toLowerCase().replace(/ /g, "_");
-        if (posterFilename) {
+        const posterFilename = film.title.toLowerCase().replace(/ /, "_");
+
             posterImg.src = `images/${posterFilename}.jpg`;
             posterImg.alt = film.title;
-        } else {
-            posterImg.src = "";
-            posterImg.alt = "No Poster Available";
-        }
-        posterCon.innerHTML = "";
+            
+
         
         posterCon.appendChild(posterImg);
         movieInfoCon.appendChild(title);
