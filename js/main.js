@@ -3,7 +3,17 @@
     const movieInfoCon = document.querySelector("#movie-info-con");
     const posterCon = document.querySelector("#poster-con");
     const baseUrl = "https://swapi.dev/api";
-    
+
+    const spinner = `<svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_d9Sa{transform-origin:center}.spinner_qQQY{animation:spinner_ZpfF 9s linear infinite}.spinner_pote{animation:spinner_ZpfF .75s linear infinite}@keyframes spinner_ZpfF{100%{transform:rotate(360deg)}}</style><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z"/><rect class="spinner_d9Sa spinner_qQQY" x="11" y="6" rx="1" width="2" height="7"/><rect class="spinner_d9Sa spinner_pote" x="11" y="11" rx="1" width="2" height="9"/></svg>`;
+
+    function showSpinner() {
+        characterBox.innerHTML = spinner;
+    }
+
+    function hideSpinner() {
+        characterBox.innerHTML = "";
+    }
+
     function getCharacters() {
         const randomPage = Math.floor(Math.random() * 7) + 1;
         fetch(`${baseUrl}/people/?page=${randomPage}`)
@@ -19,7 +29,7 @@
                 const a = document.createElement('a');
                 a.textContent = character.name;
                 a.dataset.films = JSON.stringify(character.films);
-                a.dataset.image = `https://starwars-visualguide.com/assets/img/characters/${getCharacterId(character.url)}.jpg`;
+                a.dataset.image = `images/${getCharacterId(character.url)}.jpg`;
                 li.appendChild(a);
                 ul.appendChild(li);
             });
@@ -71,7 +81,6 @@
             posterImg.src = `images/${posterFilename}.jpg`;
             posterImg.alt = film.title;
             
-
         
         posterCon.appendChild(posterImg);
         movieInfoCon.appendChild(title);
